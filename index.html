@@ -170,6 +170,10 @@
                                     <span>Recorrido de la curva</span>
                                     <span>Límite derecho</span>
                                 </div>
+                                <div class="mt-2 bg-slate-50 border border-slate-200 text-[11px] text-slate-600 px-3 py-2 rounded-xl flex items-center gap-2">
+                                    <span class="text-amber-500">💡</span>
+                                    <span>Arrastre horizontalmente sobre el gráfico o mueva el deslizador $x_0$.</span>
+                                </div>
                             </div>
                         </div>
 
@@ -211,9 +215,6 @@
 
                             <div class="relative w-full aspect-[4/3] bg-slate-900 rounded-xl overflow-hidden shadow-inner border border-slate-800">
                                 <canvas id="canvas-m1" class="w-full h-full cursor-crosshair"></canvas>
-                                <div class="absolute bottom-3 left-3 bg-slate-900/90 backdrop-blur border border-slate-700 text-[11px] text-slate-300 px-3 py-1.5 rounded-lg pointer-events-none shadow-md">
-                                    💡 Arrastre horizontalmente sobre el gráfico o mueva el deslizador $x_0$.
-                                </div>
                             </div>
 
                             <div class="flex flex-wrap items-center justify-between px-1 py-1 text-xs gap-3">
@@ -280,7 +281,7 @@
                                     $$f(x) = \begin{cases} x+2 & \text{si } x \in [-3, 1) \\ 5 - x & \text{si } x \in [1, 4] \end{cases}$$
                                 </div>
                                 <p id="m2-desc-text" class="text-xs text-gray-600 leading-relaxed pt-1">
-                                    En $x = 1$, la función presenta un salto finito. El límite por la izquierda tiende a $(1, 3)$ con <strong>círculo abierto</strong> (excluido), mientras que por la derecha la función comienza en $(1, 4)$ con <strong>círculo lleno</strong> (incluido).
+                                    Se observa que el primer tramo, asociado a la función $x+2$, está comprendido en un intervalo semiabierto que no incluye al valor $x=1$ en el límite superior (por esto el círculo se ve abierto). Mientras que en el segundo tramo, asociado a la función $5-x$, el intervalo cerrado sí toma en el extremo inferior al $x=1$, por esto el círculo va cerrado.
                                 </p>
                             </div>
 
@@ -288,7 +289,7 @@
                                 <span class="text-xs font-bold text-gray-700 block">Intervalos Resultantes en Notación Conjuntista:</span>
                                 <div class="p-3 bg-accent-light/60 rounded-xl border border-accent/20 text-xs space-y-1.5">
                                     <div id="m2-dom-res"><strong>Dominio:</strong> $\text{Dom}(f) = [-3, 4]$</div>
-                                    <div id="m2-im-res"><strong>Imagen:</strong> $\text{Im}(f) = [-1, 3) \cup [1, 4]$</div>
+                                    <div id="m2-im-res"><strong>Imagen:</strong> $\text{Im}(f) = [-1, 4]$</div>
                                 </div>
                             </div>
                         </div>
@@ -311,7 +312,7 @@
                         <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm space-y-3">
                             <div class="flex justify-between items-center px-1">
                                 <span class="text-xs font-bold text-gray-800 flex items-center gap-2">
-                                    <i class="fa-solid fa-bezier-curve text-accent"></i> Gráfico con Puntos Singulares y Asíntotas
+                                    <i class="fa-solid fa-bezier-curve text-accent"></i> Gráfico y Asíntotas
                                 </span>
                                 <div class="flex items-center gap-2 text-xs font-semibold">
                                     <span class="text-gray-400 font-normal text-[11px]">Modo:</span>
@@ -321,17 +322,18 @@
 
                             <div class="relative w-full aspect-[4/3] bg-slate-900 rounded-xl overflow-hidden shadow-inner border border-slate-800">
                                 <canvas id="canvas-m2" class="w-full h-full cursor-crosshair"></canvas>
-                                <div class="absolute bottom-3 left-3 bg-slate-900/90 backdrop-blur border border-slate-700 text-[11px] text-slate-300 px-3 py-1.5 rounded-lg pointer-events-none shadow-md">
-                                    💡 Observe los extremos con círculos rellenos $[\cdot]$ y círculos vacíos $(\cdot)$.
-                                </div>
+                            </div>
+                            <div id="m2-hint-box" class="bg-slate-50 border border-slate-200 text-[11px] text-slate-600 px-3 py-1.5 rounded-lg flex items-center gap-2">
+                                <span class="text-amber-500">💡</span>
+                                <span id="m2-hint-text">Observe los extremos con círculos rellenos $[\cdot]$ y círculos vacíos $(\cdot)$.</span>
                             </div>
 
                             <div class="flex flex-wrap items-center justify-between px-1 py-1 text-xs gap-3">
                                 <div class="flex items-center space-x-3 text-[11px]">
-                                    <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-[#436600] inline-block mr-1"></span> Rama Seccionada</span>
-                                    <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block mr-1"></span> Punto Cerrado $[\cdot]$</span>
-                                    <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block mr-1"></span> Punto Abierto $(\cdot)$</span>
-                                    <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-purple-500 inline-block mr-1"></span> Asíntota</span>
+                                    <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-[#436600] inline-block mr-1"></span> Rama de Curva</span>
+                                    <span id="m2-leg-closed" class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block mr-1"></span> Punto Cerrado $[\cdot]$</span>
+                                    <span id="m2-leg-open" class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block mr-1"></span> Punto Abierto $(\cdot)$</span>
+                                    <span id="m2-leg-asintota" class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-purple-500 inline-block mr-1"></span> Asíntota</span>
                                 </div>
                                 <div class="text-gray-400 text-[11px]">Líneas punteadas: valores inalcanzables</div>
                             </div>
@@ -440,9 +442,10 @@
 
                             <div class="relative w-full aspect-[4/3] bg-slate-900 rounded-xl overflow-hidden shadow-inner border border-slate-800">
                                 <canvas id="canvas-m3" class="w-full h-full cursor-grab active:cursor-grabbing"></canvas>
-                                <div class="absolute bottom-3 left-3 bg-slate-900/90 backdrop-blur border border-slate-700 text-[11px] text-slate-300 px-3 py-1.5 rounded-lg pointer-events-none shadow-md">
-                                    💡 Arrastre la recta roja hacia los lados para explorar todos los cortes posibles.
-                                </div>
+                            </div>
+                            <div class="bg-slate-50 border border-slate-200 text-[11px] text-slate-600 px-3 py-1.5 rounded-lg flex items-center gap-2">
+                                <span class="text-amber-500">💡</span>
+                                <span>Arrastre la recta roja hacia los lados para explorar todos los cortes posibles.</span>
                             </div>
 
                             <div class="flex flex-wrap items-center justify-between px-1 py-1 text-xs gap-3">
@@ -747,6 +750,45 @@
                 this.ctx.beginPath(); this.ctx.moveTo(0, originY); this.ctx.lineTo(w, originY); this.ctx.stroke();
                 this.ctx.beginPath(); this.ctx.moveTo(originX, 0); this.ctx.lineTo(originX, h); this.ctx.stroke();
 
+                // Graduación de los Ejes (Ticks y Números)
+                this.ctx.fillStyle = '#94a3b8';
+                this.ctx.font = '10px JetBrains Mono, monospace';
+                this.ctx.lineWidth = 1;
+                this.ctx.strokeStyle = '#64748b';
+
+                // Graduación Eje X
+                for (let x = Math.ceil(bounds.xMin); x <= Math.floor(bounds.xMax); x++) {
+                    if (x === 0) continue;
+                    const sx = toScreenX(x);
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(sx, originY - 3);
+                    this.ctx.lineTo(sx, originY + 3);
+                    this.ctx.stroke();
+                    this.ctx.textAlign = 'center';
+                    this.ctx.textBaseline = 'top';
+                    const labelY = Math.min(Math.max(originY + 5, 12), h - 14);
+                    this.ctx.fillText(x.toString(), sx, labelY);
+                }
+
+                // Graduación Eje Y
+                for (let y = Math.ceil(bounds.yMin); y <= Math.floor(bounds.yMax); y++) {
+                    if (y === 0) continue;
+                    const sy = toScreenY(y);
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(originX - 3, sy);
+                    this.ctx.lineTo(originX + 3, sy);
+                    this.ctx.stroke();
+                    this.ctx.textAlign = 'right';
+                    this.ctx.textBaseline = 'middle';
+                    const labelX = Math.min(Math.max(originX - 5, 20), w - 6);
+                    this.ctx.fillText(y.toString(), labelX, sy);
+                }
+
+                // Origen (0,0)
+                this.ctx.textAlign = 'right';
+                this.ctx.textBaseline = 'top';
+                this.ctx.fillText("0", originX - 4, originY + 4);
+
                 // Proyección de Dominio (Sombra horizontal sobre el eje X)
                 if (this.showDomain) {
                     this.ctx.fillStyle = 'rgba(16, 185, 129, 0.28)';
@@ -899,22 +941,39 @@
                 const imRes = document.getElementById('m2-im-res');
                 const badgeMode = document.getElementById('m2-badge-mode');
 
+                const hintBox = document.getElementById('m2-hint-box');
+                const legClosed = document.getElementById('m2-leg-closed');
+                const legOpen = document.getElementById('m2-leg-open');
+                const legAsintota = document.getElementById('m2-leg-asintota');
+
                 if (val === 'tramos') {
                     badgeMode.textContent = "Tramos Discontinuos";
+                    if (hintBox) hintBox.classList.remove('hidden');
+                    if (legClosed) legClosed.classList.remove('hidden');
+                    if (legOpen) legOpen.classList.remove('hidden');
+                    if (legAsintota) legAsintota.classList.add('hidden');
                     defBox.innerHTML = "$$f(x) = \\begin{cases} x+2 & \\text{si } x \\in [-3, 1) \\\\ 5 - x & \\text{si } x \\in [1, 4] \\end{cases}$$";
-                    descText.innerHTML = "En $x = 1$, la función presenta un salto finito evidente: el tramo izquierdo culmina en el punto <strong>abierto</strong> $(1, 3)$ con círculo sin pintar $\\circ$, mientras que el tramo derecho comienza en el punto <strong>cerrado</strong> $(1, 4)$ con círculo relleno $\\bullet$. La imagen de $x=1$ es exactamente $f(1) = 4$.";
+                    descText.innerHTML = "Se observa que el primer tramo, asociado a la función $x+2$, está comprendido en un intervalo semiabierto que no incluye al valor $x=1$ en el límite superior (por esto el círculo se ve abierto). Mientras que en el segundo tramo, asociado a la función $5-x$, el intervalo cerrado sí toma en el extremo inferior al $x=1$, por esto el círculo va cerrado.";
                     domRes.innerHTML = "<strong>Dominio:</strong> $\\text{Dom}(f) = [-3, 4]$";
-                    imRes.innerHTML = "<strong>Imagen:</strong> $\\text{Im}(f) = [-1, 3) \\cup [1, 4]$";
+                    imRes.innerHTML = "<strong>Imagen:</strong> $\\text{Im}(f) = [-1, 4]$";
                 } else if (val === 'asintota_v') {
                     badgeMode.textContent = "Asíntota Vertical";
+                    if (hintBox) hintBox.classList.add('hidden');
+                    if (legClosed) legClosed.classList.add('hidden');
+                    if (legOpen) legOpen.classList.add('hidden');
+                    if (legAsintota) legAsintota.classList.remove('hidden');
                     defBox.innerHTML = "$$f(x) = \\frac{1}{x - 2}$$";
-                    descText.innerHTML = "La recta vertical $x = 2$ es una <strong>asíntota vertical</strong> (discontinuidad esencial). Cuando $x \\to 2$, los valores de $y$ crecen o decrecen sin límite sin cruzar la recta; por ende, $x=2$ queda excluido del dominio.";
+                    descText.innerHTML = "La recta vertical $x = 2$ es una <strong>asíntota vertical</strong>. En los alrededores del valor $x = 2$, los valores de $y$ crecen o decrecen sin límite sin cruzar la recta; por ende, $x=2$ queda excluido del dominio.";
                     domRes.innerHTML = "<strong>Dominio:</strong> $\\text{Dom}(f) = \\mathbb{R} \\setminus \\{2\\} = (-\\infty, 2) \\cup (2, +\\infty)$";
                     imRes.innerHTML = "<strong>Imagen:</strong> $\\text{Im}(f) = \\mathbb{R} \\setminus \\{0\\} = (-\\infty, 0) \\cup (0, +\\infty)$";
                 } else if (val === 'asintota_h') {
                     badgeMode.textContent = "Asíntota Horizontal y Vertical";
+                    if (hintBox) hintBox.classList.add('hidden');
+                    if (legClosed) legClosed.classList.add('hidden');
+                    if (legOpen) legOpen.classList.add('hidden');
+                    if (legAsintota) legAsintota.classList.remove('hidden');
                     defBox.innerHTML = "$$f(x) = \\frac{2x}{x+1}$$";
-                    descText.innerHTML = "Presenta una asíntota vertical en $x = -1$ (anula el denominador) y una <strong>asíntota horizontal</strong> en $y = 2$ (cuando $x \\to \\pm\\infty$).";
+                    descText.innerHTML = "Presenta una asíntota vertical en $x = -1$ (anula el denominador) y una <strong>asíntota horizontal</strong> en $y = 2$.";
                     domRes.innerHTML = "<strong>Dominio:</strong> $\\text{Dom}(f) = \\mathbb{R} \\setminus \\{-1\\}$";
                     imRes.innerHTML = "<strong>Imagen:</strong> $\\text{Im}(f) = \\mathbb{R} \\setminus \\{2\\}$";
                 }
@@ -951,6 +1010,45 @@
                 const originY = toScreenY(0);
                 this.ctx.beginPath(); this.ctx.moveTo(0, originY); this.ctx.lineTo(w, originY); this.ctx.stroke();
                 this.ctx.beginPath(); this.ctx.moveTo(originX, 0); this.ctx.lineTo(originX, h); this.ctx.stroke();
+
+                // Graduación de los Ejes (Ticks y Números)
+                this.ctx.fillStyle = '#94a3b8';
+                this.ctx.font = '10px JetBrains Mono, monospace';
+                this.ctx.lineWidth = 1;
+                this.ctx.strokeStyle = '#64748b';
+
+                // Graduación Eje X
+                for (let x = xMin; x <= xMax; x++) {
+                    if (x === 0) continue;
+                    const sx = toScreenX(x);
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(sx, originY - 3);
+                    this.ctx.lineTo(sx, originY + 3);
+                    this.ctx.stroke();
+                    this.ctx.textAlign = 'center';
+                    this.ctx.textBaseline = 'top';
+                    const labelY = Math.min(Math.max(originY + 5, 12), h - 14);
+                    this.ctx.fillText(x.toString(), sx, labelY);
+                }
+
+                // Graduación Eje Y
+                for (let y = Math.ceil(yMin); y <= Math.floor(yMax); y++) {
+                    if (y === 0) continue;
+                    const sy = toScreenY(y);
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(originX - 3, sy);
+                    this.ctx.lineTo(originX + 3, sy);
+                    this.ctx.stroke();
+                    this.ctx.textAlign = 'right';
+                    this.ctx.textBaseline = 'middle';
+                    const labelX = Math.min(Math.max(originX - 5, 20), w - 6);
+                    this.ctx.fillText(y.toString(), labelX, sy);
+                }
+
+                // Origen (0,0)
+                this.ctx.textAlign = 'right';
+                this.ctx.textBaseline = 'top';
+                this.ctx.fillText("0", originX - 4, originY + 4);
 
                 if (this.caseType === 'tramos') {
                     // Tramo 1: x in [-3, 1) -> y = x + 2
@@ -1207,7 +1305,7 @@
                     badge.innerText = "ES FUNCIÓN";
                     diag.innerHTML = `En $x_0 = ${this.sliderX.toFixed(2)}$, la recta vertical corta a la gráfica en <strong>exactamente un punto</strong> ($y = ${inters[0] !== undefined ? inters[0].toFixed(2) : 'no definido'}$). Se respeta rigurosamente el criterio de unicidad funcional.`;
                     tipBox.className = "bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs text-emerald-900 leading-relaxed";
-                    tipBox.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> <strong>Conclusión:</strong> Para cualquier posición de la recta vertical trazada en el dominio, existe a lo sumo un punto de intersección. Se trata de una función válida.`;
+                    tipBox.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> <strong>Conclusión:</strong> Para cualquier posición de la recta vertical trazada en el dominio, existe a lo sumo un punto de intersección. Como se cumple el criterio, entonces esta relación sí es una función.`;
                 } else {
                     badge.className = "text-xs bg-rose-100 text-rose-800 px-2.5 py-0.5 rounded-full font-bold";
                     badge.innerText = "NO ES FUNCIÓN";
@@ -1254,6 +1352,45 @@
                 this.ctx.beginPath(); this.ctx.moveTo(0, originY); this.ctx.lineTo(w, originY); this.ctx.stroke();
                 this.ctx.beginPath(); this.ctx.moveTo(originX, 0); this.ctx.lineTo(originX, h); this.ctx.stroke();
 
+                // Graduación de los Ejes (Ticks y Números)
+                this.ctx.fillStyle = '#94a3b8';
+                this.ctx.font = '10px JetBrains Mono, monospace';
+                this.ctx.lineWidth = 1;
+                this.ctx.strokeStyle = '#64748b';
+
+                // Graduación Eje X
+                for (let x = xMin; x <= xMax; x++) {
+                    if (x === 0) continue;
+                    const sx = toScreenX(x);
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(sx, originY - 3);
+                    this.ctx.lineTo(sx, originY + 3);
+                    this.ctx.stroke();
+                    this.ctx.textAlign = 'center';
+                    this.ctx.textBaseline = 'top';
+                    const labelY = Math.min(Math.max(originY + 5, 12), h - 14);
+                    this.ctx.fillText(x.toString(), sx, labelY);
+                }
+
+                // Graduación Eje Y
+                for (let y = yMin; y <= yMax; y++) {
+                    if (y === 0) continue;
+                    const sy = toScreenY(y);
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(originX - 3, sy);
+                    this.ctx.lineTo(originX + 3, sy);
+                    this.ctx.stroke();
+                    this.ctx.textAlign = 'right';
+                    this.ctx.textBaseline = 'middle';
+                    const labelX = Math.min(Math.max(originX - 5, 20), w - 6);
+                    this.ctx.fillText(y.toString(), labelX, sy);
+                }
+
+                // Origen (0,0)
+                this.ctx.textAlign = 'right';
+                this.ctx.textBaseline = 'top';
+                this.ctx.fillText("0", originX - 4, originY + 4);
+
                 // Trazado de Curva según tipo
                 this.ctx.strokeStyle = '#436600';
                 this.ctx.lineWidth = 3;
@@ -1270,7 +1407,9 @@
                     this.ctx.stroke();
                 } else if (this.curveType === 'circulo') {
                     this.ctx.beginPath();
-                    this.ctx.arc(toScreenX(0), toScreenY(0), (4 / xSpan) * w, 0, 2 * Math.PI);
+                    const radiusX = (4 / xSpan) * w;
+                    const radiusY = (4 / ySpan) * h;
+                    this.ctx.ellipse(toScreenX(0), toScreenY(0), radiusX, radiusY, 0, 0, 2 * Math.PI);
                     this.ctx.stroke();
                 } else if (this.curveType === 'parabola_horiz') {
                     this.ctx.beginPath();
