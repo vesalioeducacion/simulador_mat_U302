@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATEMÁTICA - Dominio, Imagen y Prueba de la Línea Vertical (UCCuyo)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX for ultra-fast LaTeX formulas -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Outfit & JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #f7f9f6;
+        }
+        /* Paleta Institucional Verde Oliva UCCuyo */
+        .text-accent { color: #436600; }
+        .bg-accent { background-color: #436600; }
+        .bg-accent-hover:hover { background-color: #324d00; }
+        .bg-accent-light { background-color: #f1f6eb; }
+        .border-accent { border-color: #436600; }
+
+        .text-primary { color: #436600; }
+        .bg-primary { background-color: #436600; }
+        .bg-primary-dark { background-color: #324d00; }
+        .border-primary { border-color: #436600; }
+        
+        .focus-accent:focus {
+            border-color: #436600;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 102, 0, 0.2);
+        }
+
+        .code-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        canvas {
+            touch-action: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-800">
+
+    <!-- Cabecera Institucional UCCuyo -->
+    <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-3.5 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-accent flex items-center justify-center text-white font-bold text-xl shadow-md">
+                    M
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-gray-800 tracking-wide uppercase">MATEMÁTICA APLICADA</h1>
+                    <p class="text-xs text-gray-500 font-semibold">PreMédico (Facultad de Cs. Médicas - UCCuyo)</p>
+                </div>
+            </div>
+            <!-- Botón Guía de Uso -->
+            <button onclick="openTutorial()" class="flex items-center gap-1.5 px-3 py-1.5 bg-accent text-white text-xs font-semibold rounded-lg shadow-sm hover:opacity-90 transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Guía de Uso
+            </button>
+        </div>
+    </header>
+
+    <!-- Contenido Principal con Menú Lateral -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 flex flex-col lg:flex-row gap-6">
+        
+        <!-- Menú de Navegación Lateral -->
+        <nav class="w-full lg:w-64 flex flex-row lg:flex-col gap-2 bg-white p-3 rounded-2xl shadow-sm border border-gray-100 overflow-x-auto lg:overflow-x-visible whitespace-nowrap lg:whitespace-normal sticky top-20 h-fit">
+            <button onclick="switchModule(1)" id="nav-mod-1" class="bg-accent text-white flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-sm font-semibold transition shadow-sm">
+                1. Proyección Dominio e Imagen
+            </button>
+            <button onclick="switchModule(2)" id="nav-mod-2" class="text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-sm font-medium transition">
+                2. Tramos y Asíntotas
+            </button>
+            <button onclick="switchModule(3)" id="nav-mod-3" class="text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-sm font-medium transition">
+                3. Prueba Línea Vertical
+            </button>
+        </nav>
+
+        <!-- Contenedores de Sección -->
+        <div class="flex-1 overflow-hidden space-y-6">
+
+            <!-- ================= MODULE 1 ================= -->
+            <section id="module-1" class="space-y-6 block">
+                <!-- Header Card -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <div class="flex items-center space-x-2 text-accent font-semibold text-xs mb-1">
+                            <i class="fa-solid fa-book-open"></i><span>Unidad 3: Funciones Reales</span>
+                        </div>
+                        <h2 class="text-xl font-bold text-gray-800">Proyección Gráfica de Dominio e Imagen</h2>
+                        <p class="text-xs text-gray-500 mt-1 max-w-3xl leading-relaxed">
+                            Explore cómo el <strong>Dominio</strong> se proyecta horizontalmente sobre el eje de abscisas ($x$) mediante la lectura de izquierda a derecha, y la <strong>Imagen</strong> verticalmente sobre el eje de ordenadas ($y$) de abajo hacia arriba (concepto análogo a la proyección de sombras ortogonales).
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 w-full md:w-auto">
+                        <select id="m1-function-select" onchange="Module1.changeFunction(this.value)" class="bg-gray-50 border border-gray-200 text-gray-700 text-xs rounded-xl p-2.5 focus:outline-none focus-accent font-medium">
+                            <option value="parabola">Parábola: f(x) = x² - 4</option>
+                            <option value="raiz">Raíz Cuadrada: f(x) = √(x + 2)</option>
+                            <option value="cubica">Cúbica: f(x) = 0.25x³ - x</option>
+                            <option value="seno">Ondulatoria: f(x) = 3 sin(π/2 x)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Grid Principal Módulo 1 -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                    
+                    <!-- Columna Izquierda: Controles y Resultado Analítico (5 cols) -->
+                    <div class="lg:col-span-5 flex flex-col space-y-5">
+                        
+                        <!-- Tarjeta de Controles de Proyección -->
+                        <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-4">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-accent border-b pb-2 flex items-center justify-between">
+                                <span><i class="fa-solid fa-sliders mr-1.5"></i> Controles de Proyección</span>
+                                <span class="text-[11px] bg-accent-light text-accent px-2 py-0.5 rounded-full font-semibold border border-accent/20">Interactivo</span>
+                            </h3>
+
+                            <div class="space-y-3">
+                                <label class="flex items-center space-x-3 p-3 rounded-xl border border-gray-100 hover:bg-gray-50 cursor-pointer transition">
+                                    <input type="checkbox" id="m1-show-domain" onchange="Module1.toggleDomain(this.checked)" class="w-4 h-4 accent-[#436600] rounded" checked>
+                                    <div class="text-xs">
+                                        <span class="font-semibold text-gray-800 block">Proyectar Dominio ($\text{Dom}(f)$)</span>
+                                        <span class="text-gray-500 text-[11px]">Sombra horizontal sobre el eje $x$ (Izquierda a Derecha)</span>
+                                    </div>
+                                </label>
+
+                                <label class="flex items-center space-x-3 p-3 rounded-xl border border-gray-100 hover:bg-gray-50 cursor-pointer transition">
+                                    <input type="checkbox" id="m1-show-image" onchange="Module1.toggleImage(this.checked)" class="w-4 h-4 accent-amber-600 rounded" checked>
+                                    <div class="text-xs">
+                                        <span class="font-semibold text-gray-800 block">Proyectar Imagen ($\text{Im}(f)$)</span>
+                                        <span class="text-gray-500 text-[11px]">Sombra vertical sobre el eje $y$ (Abajo hacia Arriba)</span>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <!-- Explorador Dinámico del Punto Trazador -->
+                            <div class="space-y-1.5 pt-2 border-t border-gray-100">
+                                <div class="flex justify-between text-xs font-semibold text-gray-700">
+                                    <span>Punto Trazador $x_0$:</span>
+                                    <span class="text-accent code-font"><span id="m1-slider-val">0.00</span></span>
+                                </div>
+                                <input type="range" id="m1-slider-x" min="-4" max="4" step="0.05" value="0" oninput="Module1.sliderMoved(this.value)" class="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#436600]">
+                                <div class="flex justify-between text-[10px] text-gray-400">
+                                    <span>Límite izquierdo</span>
+                                    <span>Recorrido de la curva</span>
+                                    <span>Límite derecho</span>
+                                </div>
+                                <div class="mt-2 bg-slate-50 border border-slate-200 text-[11px] text-slate-600 px-3 py-2 rounded-xl flex items-center gap-2">
+                                    <span class="text-amber-500">💡</span>
+                                    <span>Arrastre horizontalmente sobre el gráfico o mueva el deslizador $x_0$.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta de Resultado Analítico -->
+                        <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-3">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-gray-700 flex items-center gap-1.5">
+                                <i class="fa-solid fa-square-root-variable text-accent"></i> Determinación de Conjuntos
+                            </h4>
+                            <div class="space-y-2 text-xs">
+                                <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                                    <span class="text-gray-500 text-[11px] block">Función en Estudio:</span>
+                                    <div id="m1-formula-latex" class="font-medium text-gray-800 text-sm mt-0.5">$$f(x) = x^2 - 4$$</div>
+                                </div>
+                                <div class="bg-emerald-50/70 p-2.5 rounded-xl border border-emerald-100">
+                                    <span class="text-emerald-700 font-semibold text-[11px] block">Dominio (Lectura en Eje X):</span>
+                                    <div id="m1-domain-latex" class="font-medium text-emerald-900 text-sm mt-0.5">$$\text{Dom}(f) = (-\infty, +\infty)$$</div>
+                                </div>
+                                <div class="bg-amber-50/70 p-2.5 rounded-xl border border-amber-100">
+                                    <span class="text-amber-800 font-semibold text-[11px] block">Imagen (Lectura en Eje Y):</span>
+                                    <div id="m1-image-latex" class="font-medium text-amber-900 text-sm mt-0.5">$$\text{Im}(f) = [-4, +\infty)$$</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Columna Derecha: Canvas Interactivo y Correlación Médica (7 cols) -->
+                    <div class="lg:col-span-7 flex flex-col space-y-5">
+                        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm space-y-3">
+                            <div class="flex justify-between items-center px-1">
+                                <span class="text-xs font-bold text-gray-800 flex items-center gap-2">
+                                    <i class="fa-solid fa-chart-area text-accent"></i> Plano Cartesiano y Sombras Ortogonales
+                                </span>
+                                <div class="flex items-center gap-2 text-xs font-semibold">
+                                    <span class="text-gray-400 font-normal text-[11px]">Estado:</span>
+                                    <span class="text-accent font-bold text-xs">Sincronizado</span>
+                                </div>
+                            </div>
+
+                            <div class="relative w-full aspect-[4/3] bg-slate-900 rounded-xl overflow-hidden shadow-inner border border-slate-800">
+                                <canvas id="canvas-m1" class="w-full h-full cursor-crosshair"></canvas>
+                            </div>
+
+                            <div class="flex flex-wrap items-center justify-between px-1 py-1 text-xs gap-3">
+                                <div class="flex items-center space-x-3 text-[11px]">
+                                    <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-[#436600] inline-block mr-1"></span> Curva $f(x)$</span>
+                                    <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block mr-1"></span> Dom($f$)</span>
+                                    <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block mr-1"></span> Im($f$)</span>
+                                </div>
+                                <div class="text-gray-400 text-[11px]">Lectura ortogonal $x \to \text{Eje Abscisas}$, $y \to \text{Eje Ordenadas}$</div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta de Correlación Médica Módulo 1 -->
+                        <div class="bg-accent-light border border-accent/20 rounded-2xl p-5 shadow-sm space-y-2">
+                            <h3 class="text-xs font-bold uppercase tracking-wide text-accent flex items-center gap-2">
+                                <i class="fa-solid fa-stethoscope"></i> Correlación Fisiológica y Farmacocinética
+                            </h3>
+                            <p class="text-xs text-gray-700 leading-relaxed font-normal">
+                                En modelos médicos (como la cinética de absorción de un antibiótico), el <strong>dominio</strong> representa la variable controlada independiente (tiempo $t \ge 0\text{ h}$), de modo que $t \in [0, +\infty)$. La <strong>imagen</strong> corresponde a la concentración plasmática alcanzada ($C(t) \in [0, C_{\text{máx}}]$). Comprender la proyección evita errores clínicos como extrapolar concentraciones negativas o tiempos previos a la dosificación.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ================= MODULE 2 ================= -->
+            <section id="module-2" class="space-y-6 hidden">
+                <!-- Header Card -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <div class="flex items-center space-x-2 text-accent font-semibold text-xs mb-1">
+                            <i class="fa-solid fa-code-branch"></i><span>Unidad 3: Singularidades y Discontinuidades</span>
+                        </div>
+                        <h2 class="text-xl font-bold text-gray-800">Puntos Cerrados, Abiertos, Tramos y Asíntotas</h2>
+                        <p class="text-xs text-gray-500 mt-1 max-w-3xl leading-relaxed">
+                            Analice cómo las funciones seccionadas utilizan puntos llenos ($\bullet$ asociados a corchetes $[\cdot]$ que denotan inclusión) frente a puntos abiertos ($\circ$ asociados a paréntesis $(\cdot)$ que denotan exclusión), junto con las líneas asintóticas que restringen analítica y geométricamente el dominio.
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 w-full md:w-auto">
+                        <select id="m2-case-select" onchange="Module2.changeCase(this.value)" class="bg-gray-50 border border-gray-200 text-gray-700 text-xs rounded-xl p-2.5 focus:outline-none focus-accent font-medium">
+                            <option value="tramos">Función Seccionada con Salto Finito (Puntos Abierto y Cerrado)</option>
+                            <option value="asintota_v">Asíntota Vertical: f(x) = 1 / (x - 2)</option>
+                            <option value="asintota_h">Asíntota Horizontal y Vertical: f(x) = 2x / (x + 1)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Grid Principal Módulo 2 -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                    
+                    <!-- Columna Izquierda: Definición y Análisis Riguroso (5 cols) -->
+                    <div class="lg:col-span-5 flex flex-col space-y-5">
+                        
+                        <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-3">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-accent border-b pb-2 flex items-center justify-between">
+                                <span><i class="fa-solid fa-list-check mr-1.5"></i> Formulación Matemática</span>
+                                <span class="text-[11px] bg-purple-50 text-purple-700 px-2 py-0.5 rounded-full font-semibold border border-purple-200">Riguroso</span>
+                            </h3>
+
+                            <div class="bg-gray-50 rounded-xl p-3.5 border border-gray-100 space-y-2">
+                                <span class="text-gray-500 text-[11px] block font-semibold">Definición de la Función:</span>
+                                <div id="m2-def-box" class="p-2.5 bg-white rounded-lg border border-gray-200 text-center font-medium text-xs">
+                                    $$f(x) = \begin{cases} x+2 & \text{si } x \in [-3, 1) \\ 5 - x & \text{si } x \in [1, 4] \end{cases}$$
+                                </div>
+                                <p id="m2-desc-text" class="text-xs text-gray-600 leading-relaxed pt-1">
+                                    Se observa que el primer tramo, asociado a la función $x+2$, está comprendido en un intervalo semiabierto que no incluye al valor $x=1$ en el límite superior (por esto el círculo se ve abierto). Mientras que en el segundo tramo, asociado a la función $5-x$, el intervalo cerrado sí toma en el extremo inferior al $x=1$, por esto el círculo va cerrado.
+                                </p>
+                            </div>
+
+                            <div class="space-y-2 pt-2">
+                                <span class="text-xs font-bold text-gray-700 block">Intervalos Resultantes en Notación Conjuntista:</span>
+                                <div class="p-3 bg-accent-light/60 rounded-xl border border-accent/20 text-xs space-y-1.5">
+                                    <div id="m2-dom-res"><strong>Dominio:</strong> $\text{Dom}(f) = [-3, 4]$</div>
+                                    <div id="m2-im-res"><strong>Imagen:</strong> $\text{Im}(f) = [-1, 4]$</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Alerta Didáctica de Examen de Ingreso -->
+                        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 shadow-sm text-xs text-amber-900 leading-relaxed space-y-1">
+                            <div class="font-bold flex items-center gap-1.5 text-amber-800">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                Criterio Clave para el Examen UCCuyo:
+                            </div>
+                            <p>
+                                Un punto abierto $\circ$ indica que ese par $(x_0, y_0)$ <strong>no pertenece</strong> a la gráfica. Si una recta vertical pasa por un punto abierto y por ningún punto cerrado, la función <em>no está definida</em> en esa abscisa. Si pasa por un punto abierto y a otra altura por un punto cerrado, se cumple la <strong>unicidad</strong> ($f(x_0)$ toma el valor del punto cerrado).
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <!-- Columna Derecha: Canvas Módulo 2 y Aplicación Médica (7 cols) -->
+                    <div class="lg:col-span-7 flex flex-col space-y-5">
+                        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm space-y-3">
+                            <div class="flex justify-between items-center px-1">
+                                <span class="text-xs font-bold text-gray-800 flex items-center gap-2">
+                                    <i class="fa-solid fa-bezier-curve text-accent"></i> Gráfico y Asíntotas
+                                </span>
+                                <div class="flex items-center gap-2 text-xs font-semibold">
+                                    <span class="text-gray-400 font-normal text-[11px]">Modo:</span>
+                                    <span class="text-accent font-bold text-xs" id="m2-badge-mode">Tramos Discontinuos</span>
+                                </div>
+                            </div>
+
+                            <div class="relative w-full aspect-[4/3] bg-slate-900 rounded-xl overflow-hidden shadow-inner border border-slate-800">
+                                <canvas id="canvas-m2" class="w-full h-full cursor-crosshair"></canvas>
+                            </div>
+                            <div id="m2-hint-box" class="bg-slate-50 border border-slate-200 text-[11px] text-slate-600 px-3 py-1.5 rounded-lg flex items-center gap-2">
+                                <span class="text-amber-500">💡</span>
+                                <span id="m2-hint-text">Observe los extremos con círculos rellenos $[\cdot]$ y círculos vacíos $(\cdot)$.</span>
+                            </div>
+
+                            <div class="flex flex-wrap items-center justify-between px-1 py-1 text-xs gap-3">
+                                <div class="flex items-center space-x-3 text-[11px]">
+                                    <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-[#436600] inline-block mr-1"></span> Rama de Curva</span>
+                                    <span id="m2-leg-closed" class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block mr-1"></span> Punto Cerrado $[\cdot]$</span>
+                                    <span id="m2-leg-open" class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block mr-1"></span> Punto Abierto $(\cdot)$</span>
+                                    <span id="m2-leg-asintota" class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-purple-500 inline-block mr-1"></span> Asíntota</span>
+                                </div>
+                                <div class="text-gray-400 text-[11px]">Líneas punteadas: valores inalcanzables</div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta de Correlación Médica Módulo 2 -->
+                        <div class="bg-accent-light border border-accent/20 rounded-2xl p-5 shadow-sm space-y-2">
+                            <h3 class="text-xs font-bold uppercase tracking-wide text-accent flex items-center gap-2">
+                                <i class="fa-solid fa-heart-pulse"></i> Aplicación Médica: Umbrales y Cinética Saturable
+                            </h3>
+                            <p class="text-xs text-gray-700 leading-relaxed font-normal">
+                                Las funciones por tramos modelan las respuestas <strong>todo o nada</strong> en neurofisiología: un potencial de acción no se dispara hasta alcanzar el umbral de despolarización ($-55\text{ mV}$), momento en el cual la curva sufre un cambio abrupto de pendiente. Asimismo, las <strong>asíntotas horizontales</strong> representan la velocidad máxima de catálisis enzimática ($V_{\text{máx}}$ en Michaelis-Menten) o la saturación total de los transportadores renales de glucosa.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ================= MODULE 3 ================= -->
+            <section id="module-3" class="space-y-6 hidden">
+                <!-- Header Card -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <div class="flex items-center space-x-2 text-accent font-semibold text-xs mb-1">
+                            <i class="fa-solid fa-ruler-vertical"></i><span>Unidad 3: Definición Formal de Función</span>
+                        </div>
+                        <h2 class="text-xl font-bold text-gray-800">La Prueba de la Línea Vertical (¿Es una función?)</h2>
+                        <p class="text-xs text-gray-500 mt-1 max-w-3xl leading-relaxed">
+                            Compruebe el criterio de <strong>Existencia y Unicidad</strong>: arrastre la recta vertical móvil $x = x_0$ a través de todo el plano para determinar si cada elemento del dominio posee a lo sumo una única imagen asociada en el conjunto de llegada.
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 w-full md:w-auto">
+                        <select id="m3-curve-select" onchange="Module3.changeCurve(this.value)" class="bg-gray-50 border border-gray-200 text-gray-700 text-xs rounded-xl p-2.5 focus:outline-none focus-accent font-medium">
+                            <option value="funcion_valida">Función Cúbica Válida: f(x) = 0.2x³ - 1.5x (SÍ es función)</option>
+                            <option value="circulo">Circunferencia: x² + y² = 16 (NO es función)</option>
+                            <option value="parabola_horiz">Parábola Horizontal: x = y² (NO es función)</option>
+                            <option value="onda_ruptura">Curva con Rama Doble Solapada (NO es función)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Grid Principal Módulo 3 -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                    
+                    <!-- Columna Izquierda: Diagnóstico de Unicidad y Controles (5 cols) -->
+                    <div class="lg:col-span-5 flex flex-col space-y-5">
+                        
+                        <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-4">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-accent border-b pb-2 flex items-center justify-between">
+                                <span><i class="fa-solid fa-calculator mr-1.5"></i> Veredicto de Unicidad</span>
+                                <span id="m3-badge-status" class="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full font-bold">ES FUNCIÓN</span>
+                            </h3>
+
+                            <div class="space-y-3">
+                                <div>
+                                    <div class="flex justify-between text-xs font-semibold text-gray-700 mb-1">
+                                        <span>Posición de la Recta Vertical ($x_0$):</span>
+                                        <span class="text-accent code-font"><span id="m3-xval">0.00</span></span>
+                                    </div>
+                                    <input type="range" id="m3-slider" min="-5" max="5" step="0.05" value="0" oninput="Module3.sliderMoved(this.value)" class="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#436600]">
+                                </div>
+
+                                <div class="bg-gray-50 rounded-xl p-3.5 border border-gray-100 space-y-2">
+                                    <h4 class="text-xs font-bold uppercase tracking-wider text-gray-500">Diagnóstico Instantáneo en $x = x_0$</h4>
+                                    <div class="text-xs space-y-1">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-gray-600">Puntos de corte detectados:</span>
+                                            <span id="m3-intersections-count" class="font-bold text-gray-900 code-font text-sm bg-white px-2 py-0.5 rounded border border-gray-200">1</span>
+                                        </div>
+                                        <p id="m3-diagnosis-text" class="text-xs text-gray-600 mt-2 leading-relaxed">
+                                            La recta vertical corta a la gráfica en exactamente un punto. Se cumple la condición de unicidad: para cada valor de $x$ le corresponde una única salida $y$.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Teorema Fundamental -->
+                            <div class="p-3 bg-accent-light/50 rounded-xl border border-accent/20 text-xs text-gray-700 space-y-1">
+                                <p class="font-bold text-accent"><i class="fa-solid fa-graduation-cap mr-1"></i> Teorema de la Recta Vertical:</p>
+                                <p class="leading-relaxed">
+                                    Una relación binaria en $\mathbb{R}^2$ representa una función si y solo si <strong>ninguna recta vertical</strong> interseca a la gráfica en más de un punto.
+                                </p>
+                            </div>
+
+                            <div id="m3-tip-box" class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs text-emerald-900 leading-relaxed">
+                                <i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i>
+                                <strong>Conclusión:</strong> Esta curva pasa satisfactoriamente la prueba de la línea vertical en todo su dominio.
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Columna Derecha: Canvas Interactivo y Aplicación Clínica (7 cols) -->
+                    <div class="lg:col-span-7 flex flex-col space-y-5">
+                        <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm space-y-3">
+                            <div class="flex justify-between items-center px-1">
+                                <span class="text-xs font-bold text-gray-800 flex items-center gap-2">
+                                    <i class="fa-solid fa-arrows-left-right text-accent"></i> Visualizador Dinámico de Intersecciones
+                                </span>
+                                <div class="flex items-center gap-2 text-xs font-semibold">
+                                    <span class="text-gray-400 font-normal text-[11px]">Interacción:</span>
+                                    <span class="text-accent font-bold text-xs">Arrastre Activo</span>
+                                </div>
+                            </div>
+
+                            <div class="relative w-full aspect-[4/3] bg-slate-900 rounded-xl overflow-hidden shadow-inner border border-slate-800">
+                                <canvas id="canvas-m3" class="w-full h-full cursor-grab active:cursor-grabbing"></canvas>
+                            </div>
+                            <div class="bg-slate-50 border border-slate-200 text-[11px] text-slate-600 px-3 py-1.5 rounded-lg flex items-center gap-2">
+                                <span class="text-amber-500">💡</span>
+                                <span>Arrastre la recta roja hacia los lados para explorar todos los cortes posibles.</span>
+                            </div>
+
+                            <div class="flex flex-wrap items-center justify-between px-1 py-1 text-xs gap-3">
+                                <div class="flex items-center space-x-3 text-[11px]">
+                                    <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-[#436600] inline-block mr-1"></span> Relación Gráfica</span>
+                                    <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block mr-1"></span> Recta $x = x_0$</span>
+                                    <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block mr-1"></span> Puntos de Corte</span>
+                                </div>
+                                <div class="text-gray-400 text-[11px]">Condición: a lo sumo un punto por abscisa</div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta de Correlación Médica Módulo 3 -->
+                        <div class="bg-accent-light border border-accent/20 rounded-2xl p-5 shadow-sm space-y-2">
+                            <h3 class="text-xs font-bold uppercase tracking-wide text-accent flex items-center gap-2">
+                                <i class="fa-solid fa-dna"></i> Significado Clínico: Unicidad del Estado Fisiológico
+                            </h3>
+                            <p class="text-xs text-gray-700 leading-relaxed font-normal">
+                                En la monitorización médica intensiva, un paciente no puede tener dos presiones arteriales medias o dos temperaturas corporales distintas en el mismo instante $t$. La exigencia matemática de que una relación sea función asegura que las historias clínicas y curvas de monitoreo tengan un <strong>valor biológico inequívoco</strong> para la toma de decisiones terapéuticas.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Modal Guía de Uso del Simulador -->
+    <div id="tutorial-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto custom-scroll">
+            <div class="flex items-center justify-between border-b pb-3">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-accent"></span>
+                    <h3 class="text-base font-bold text-gray-800 uppercase tracking-wide">Guía de Uso del Simulador de Matemática</h3>
+                </div>
+                <button onclick="closeTutorial()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+            </div>
+            
+            <div class="space-y-4 text-xs text-gray-600 leading-relaxed">
+                <div class="bg-gray-50 p-3.5 rounded-xl border border-gray-100">
+                    <span class="font-bold text-gray-800 text-xs block mb-1">Propósito Pedagógico (Curso de Ingreso a Medicina - UCCuyo):</span>
+                    Este simulador interactivo permite dominar la lectura gráfica de funciones reales: la proyección precisa del dominio sobre el eje horizontal de abscisas ($x$) y de la imagen sobre el eje vertical de ordenadas ($y$); el análisis de discontinuidades con puntos abiertos y cerrados; la identificación de restricciones asintóticas; y la verificación de la condición de existencia y unicidad funcional mediante la prueba de la línea vertical.
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm mb-1 text-accent">1. Módulo 1: Proyección de Dominio e Imagen</h4>
+                    <ul class="list-disc list-inside space-y-1.5 ml-1 text-gray-600">
+                        <li><strong>Proyección del Dominio ($\text{Dom}(f)$):</strong> Representa el conjunto de todas las abscisas para las cuales la función existe. Se lee horizontalmente de izquierda a derecha (sombra verde esmeralda sobre el eje $x$).</li>
+                        <li><strong>Proyección de la Imagen ($\text{Im}(f)$):</strong> Representa el recorrido total de los valores obtenidos en las ordenadas. Se lee verticalmente de abajo hacia arriba (sombra ámbar sobre el eje $y$).</li>
+                        <li><strong>Casos de Estudio Disponibles:</strong>
+                            <ul class="list-none ml-4 space-y-0.5 text-gray-500 text-[11px]">
+                                <li>• <em>Parábola cuadrática:</em> $f(x) = x^2 - 4 \implies \text{Dom}(f) = \mathbb{R}, \, \text{Im}(f) = [-4, +\infty)$.</li>
+                                <li>• <em>Raíz cuadrada:</em> $f(x) = \sqrt{x+2} \implies \text{Dom}(f) = [-2, +\infty), \, \text{Im}(f) = [0, +\infty)$ con punto extremo cerrado $[-2, 0]$.</li>
+                                <li>• <em>Cúbica:</em> $f(x) = 0.25x^3 - x \implies \text{Dom}(f) = \mathbb{R}, \, \text{Im}(f) = \mathbb{R}$.</li>
+                                <li>• <em>Ondulatoria:</em> $f(x) = 3\sin(\frac{\pi}{2}x) \implies \text{Dom}(f) = \mathbb{R}, \, \text{Im}(f) = [-3, 3]$.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Punto Trazador Interactivo:</strong> Mueva el deslizador $x_0$ o arrastre horizontalmente con el cursor/touch sobre el lienzo para observar en tiempo real las dos líneas punteadas que proyectan ortogonalmente las coordenadas $(x_0, f(x_0))$ hacia sus respectivas sombras en ambos ejes.</li>
+                        <li><strong>Filtros de Visualización:</strong> Active o desactive individualmente las casillas de verificación para aislar la sombra del dominio o de la imagen.</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm mb-1 text-accent">2. Módulo 2: Puntos Cerrados, Abiertos, Tramos y Asíntotas</h4>
+                    <ul class="list-disc list-inside space-y-1.5 ml-1 text-gray-600">
+                        <li><strong>Puntos Llenos vs. Abiertos:</strong> Un círculo verde relleno $\bullet$ representa inclusión (corchete $[\cdot]$). Un círculo blanco con borde rojo $\circ$ indica exclusión (paréntesis $(\cdot)$).</li>
+                        <li><strong>Función Seccionada con Salto Finito:</strong> Examine $f(x) = x+2$ para $x \in [-3, 1)$ y $f(x) = 5-x$ para $x \in [1, 4]$. En la abscisa $x = 1$, el tramo izquierdo culmina en el punto abierto $(1, 3)$, mientras que el tramo derecho comienza en el punto cerrado $(1, 4)$. Esto demuestra que $f(1) = 4$ y que no existe ambigüedad de asignación.</li>
+                        <li><strong>Asíntota Vertical ($x = 2$):</strong> En $f(x) = \frac{1}{x-2}$, la línea vertical discontinua púrpura marca la restricción obligatoria del dominio ($\text{Dom}(f) = \mathbb{R} \setminus \{2\}$), valor al cual las ramas hiperbólicas tienden asintóticamente sin llegar a tocar jamás.</li>
+                        <li><strong>Asíntotas Simultáneas:</strong> En $f(x) = \frac{2x}{x+1}$, visualice tanto la asíntota vertical en $x = -1$ como la asíntota horizontal en $y = 2$ ($\text{Im}(f) = \mathbb{R} \setminus \{2\}$).</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm mb-1 text-accent">3. Módulo 3: La Prueba de la Línea Vertical (¿Es una función?)</h4>
+                    <ul class="list-disc list-inside space-y-1.5 ml-1 text-gray-600">
+                        <li><strong>Condición Formal de Unicidad:</strong> Para que una relación gráfica represente una función $y = f(x)$, a cada valor de entrada del dominio le debe corresponder a lo sumo una única imagen.</li>
+                        <li><strong>Mecánica Interactiva de Barrido:</strong> Arrastre la recta vertical roja discontinua $x = x_0$ a lo largo de toda la cuadrícula o utilice el deslizador inferior. El sistema calcula y resalta automáticamente en verde (1 corte) o en rojo ($\ge 2$ cortes) los puntos de contacto exactos.</li>
+                        <li><strong>Catálogo de Relaciones de Prueba:</strong>
+                            <ul class="list-none ml-4 space-y-0.5 text-gray-500 text-[11px]">
+                                <li>• <em>Cúbica $f(x) = 0.2x^3 - 1.5x$:</em> Supera la prueba en todo punto $\implies$ <strong>ES FUNCIÓN</strong>.</li>
+                                <li>• <em>Circunferencia $x^2 + y^2 = 16$:</em> Produce 2 intersecciones en $x \in (-4, 4) \implies$ <strong>NO ES FUNCIÓN</strong>.</li>
+                                <li>• <em>Parábola horizontal $x = y^2$:</em> Dos imágenes simétricas para $x > 0 \implies$ <strong>NO ES FUNCIÓN</strong>.</li>
+                                <li>• <em>Curva con solapamiento:</em> Ramas superpuestas en la región central $\implies$ <strong>NO ES FUNCIÓN</strong>.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-accent-light/50 p-3 rounded-xl border border-accent/20">
+                    <span class="font-bold text-gray-800 text-xs block mb-1">💡 Correlación Médica y Clínica:</span>
+                    Cada módulo incorpora una sección que fundamenta la importancia del análisis funcional en farmacocinética (relación unívoca tiempo-concentración plasmática), neurofisiología (umbrales de despolarización todo o nada en potenciales de acción) y consistencia biológica de historias clínicas automatizadas.
+                </div>
+            </div>
+
+            <div class="pt-3 border-t flex justify-end">
+                <button onclick="closeTutorial()" class="px-5 py-2 bg-accent text-white text-xs font-semibold rounded-xl hover:bg-accent-hover transition shadow-sm">
+                    Entendido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pie de Página Institucional -->
+    <footer class="bg-white border-t border-gray-200 py-4 mt-8 text-center text-xs text-gray-500">
+        Desarrollado por vesalio - Todos los derechos reservados
+    </footer>
+
+    <script>
+        // Funciones del Tutorial
+        function openTutorial() {
+            document.getElementById('tutorial-modal').classList.remove('hidden');
+        }
+        function closeTutorial() {
+            document.getElementById('tutorial-modal').classList.add('hidden');
+        }
+
+        // Renderizado KaTeX seguro
+        function renderKaTeX() {
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        { left: '$$', right: '$$', display: true },
+                        { left: '$', right: '$', display: false }
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        // Cambio de Módulos (Pestañas)
+        function switchModule(modId) {
+            for (let i = 1; i <= 3; i++) {
+                const sec = document.getElementById(`module-${i}`);
+                const btn = document.getElementById(`nav-mod-${i}`);
+                if (i === modId) {
+                    sec.classList.remove('hidden');
+                    btn.className = "bg-accent text-white flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-sm font-semibold transition shadow-sm";
+                } else {
+                    sec.classList.add('hidden');
+                    btn.className = "text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-sm font-medium transition";
+                }
+            }
+
+            if (modId === 1) Module1.resizeAndDraw();
+            if (modId === 2) Module2.resizeAndDraw();
+            if (modId === 3) Module3.resizeAndDraw();
+
+            renderKaTeX();
+        }
+
+        // ================= MODULE 1 CONTROLLER =================
+        const Module1 = {
+            canvas: null,
+            ctx: null,
+            fnType: 'parabola',
+            showDomain: true,
+            showImage: true,
+            sliderX: 0.0,
+            isDragging: false,
+            init() {
+                this.canvas = document.getElementById('canvas-m1');
+                this.ctx = this.canvas.getContext('2d');
+                this.resizeCanvas();
+                window.addEventListener('resize', () => this.resizeCanvas());
+
+                this.canvas.addEventListener('mousedown', (e) => { this.isDragging = true; this.updateFromMouse(e); });
+                window.addEventListener('mousemove', (e) => { if (this.isDragging) this.updateFromMouse(e); });
+                window.addEventListener('mouseup', () => { this.isDragging = false; });
+
+                this.canvas.addEventListener('touchstart', (e) => { this.isDragging = true; this.updateFromTouch(e); }, { passive: true });
+                window.addEventListener('touchmove', (e) => { if (this.isDragging) this.updateFromTouch(e); }, { passive: true });
+                window.addEventListener('touchend', () => { this.isDragging = false; });
+            },
+            resizeCanvas() {
+                const rect = this.canvas.getBoundingClientRect();
+                this.canvas.width = rect.width * (window.devicePixelRatio || 1);
+                this.canvas.height = rect.height * (window.devicePixelRatio || 1);
+                this.ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+                this.draw();
+            },
+            resizeAndDraw() {
+                this.resizeCanvas();
+            },
+            changeFunction(val) {
+                this.fnType = val;
+                const fLatex = document.getElementById('m1-formula-latex');
+                const dLatex = document.getElementById('m1-domain-latex');
+                const iLatex = document.getElementById('m1-image-latex');
+
+                if (val === 'parabola') {
+                    fLatex.innerHTML = "$$f(x) = x^2 - 4$$";
+                    dLatex.innerHTML = "$$\\text{Dom}(f) = \\mathbb{R} = (-\\infty, +\\infty)$$";
+                    iLatex.innerHTML = "$$\\text{Im}(f) = [-4, +\\infty)$$";
+                    this.sliderX = 1.0;
+                } else if (val === 'raiz') {
+                    fLatex.innerHTML = "$$f(x) = \\sqrt{x+2}$$";
+                    dLatex.innerHTML = "$$\\text{Dom}(f) = [-2, +\\infty)$$";
+                    iLatex.innerHTML = "$$\\text{Im}(f) = [0, +\\infty)$$";
+                    this.sliderX = 2.0;
+                } else if (val === 'cubica') {
+                    fLatex.innerHTML = "$$f(x) = 0.25x^3 - x$$";
+                    dLatex.innerHTML = "$$\\text{Dom}(f) = \\mathbb{R} = (-\\infty, +\\infty)$$";
+                    iLatex.innerHTML = "$$\\text{Im}(f) = (-\\infty, +\\infty)$$";
+                    this.sliderX = -1.2;
+                } else if (val === 'seno') {
+                    fLatex.innerHTML = "$$f(x) = 3\\sin\\left(\\frac{\\pi}{2}x\\right)$$";
+                    dLatex.innerHTML = "$$\\text{Dom}(f) = \\mathbb{R} = (-\\infty, +\\infty)$$";
+                    iLatex.innerHTML = "$$\\text{Im}(f) = [-3, 3]$$";
+                    this.sliderX = 1.0;
+                }
+
+                document.getElementById('m1-slider-x').value = this.sliderX;
+                document.getElementById('m1-slider-val').textContent = this.sliderX.toFixed(2);
+                renderKaTeX();
+                this.draw();
+            },
+            toggleDomain(val) {
+                this.showDomain = val;
+                this.draw();
+            },
+            toggleImage(val) {
+                this.showImage = val;
+                this.draw();
+            },
+            sliderMoved(val) {
+                this.sliderX = parseFloat(val);
+                document.getElementById('m1-slider-val').textContent = this.sliderX.toFixed(2);
+                this.draw();
+            },
+            updateFromMouse(e) {
+                const rect = this.canvas.getBoundingClientRect();
+                const px = e.clientX - rect.left;
+                const bounds = this.getIntervals();
+                const xSpan = bounds.xMax - bounds.xMin;
+                let x = bounds.xMin + (px / rect.width) * xSpan;
+                x = Math.max(-4, Math.min(4, x));
+                this.sliderX = x;
+                document.getElementById('m1-slider-x').value = x;
+                document.getElementById('m1-slider-val').textContent = x.toFixed(2);
+                this.draw();
+            },
+            updateFromTouch(e) {
+                if (!e.touches[0]) return;
+                const rect = this.canvas.getBoundingClientRect();
+                const px = e.touches[0].clientX - rect.left;
+                const bounds = this.getIntervals();
+                const xSpan = bounds.xMax - bounds.xMin;
+                let x = bounds.xMin + (px / rect.width) * xSpan;
+                x = Math.max(-4, Math.min(4, x));
+                this.sliderX = x;
+                document.getElementById('m1-slider-x').value = x;
+                document.getElementById('m1-slider-val').textContent = x.toFixed(2);
+                this.draw();
+            },
+            evalFn(x) {
+                if (this.fnType === 'parabola') return x * x - 4;
+                if (this.fnType === 'raiz') return x >= -2 ? Math.sqrt(x + 2) : NaN;
+                if (this.fnType === 'cubica') return 0.25 * x * x * x - x;
+                if (this.fnType === 'seno') return 3 * Math.sin((Math.PI / 2) * x);
+                return 0;
+            },
+            getIntervals() {
+                if (this.fnType === 'parabola') return { xMin: -5, xMax: 5, yMin: -5, yMax: 6 };
+                if (this.fnType === 'raiz') return { xMin: -3.5, xMax: 6.5, yMin: -1.5, yMax: 4.5 };
+                if (this.fnType === 'cubica') return { xMin: -4.5, xMax: 4.5, yMin: -5, yMax: 5 };
+                if (this.fnType === 'seno') return { xMin: -5, xMax: 5, yMin: -4, yMax: 4 };
+                return { xMin: -5, xMax: 5, yMin: -5, yMax: 5 };
+            },
+            draw() {
+                if (!this.ctx) return;
+                const rect = this.canvas.getBoundingClientRect();
+                const w = rect.width;
+                const h = rect.height;
+                this.ctx.clearRect(0, 0, w, h);
+
+                const bounds = this.getIntervals();
+                const xSpan = bounds.xMax - bounds.xMin;
+                const ySpan = bounds.yMax - bounds.yMin;
+
+                const toScreenX = (x) => ((x - bounds.xMin) / xSpan) * w;
+                const toScreenY = (y) => h - ((y - bounds.yMin) / ySpan) * h;
+
+                // Cuadrícula Cartesiana
+                this.ctx.strokeStyle = '#1e293b';
+                this.ctx.lineWidth = 1;
+                for (let x = Math.ceil(bounds.xMin); x <= Math.floor(bounds.xMax); x++) {
+                    const sx = toScreenX(x);
+                    this.ctx.beginPath(); this.ctx.moveTo(sx, 0); this.ctx.lineTo(sx, h); this.ctx.stroke();
+                }
+                for (let y = Math.ceil(bounds.yMin); y <= Math.floor(bounds.yMax); y++) {
+                    const sy = toScreenY(y);
+                    this.ctx.beginPath(); this.ctx.moveTo(0, sy); this.ctx.lineTo(w, sy); this.ctx.stroke();
+                }
+
+                // Ejes Coordenados
+                this.ctx.strokeStyle = '#64748b';
+                this.ctx.lineWidth = 1.5;
+                const originX = toScreenX(0);
+                const originY = toScreenY(0);
+                this.ctx.beginPath(); this.ctx.moveTo(0, originY); this.ctx.lineTo(w, originY); this.ctx.stroke();
+                this.ctx.beginPath(); this.ctx.moveTo(originX, 0); this.ctx.lineTo(originX, h); this.ctx.stroke();
+
+                // Graduación de los Ejes (Ticks y Números)
+                this.ctx.fillStyle = '#94a3b8';
+                this.ctx.font = '10px JetBrains Mono, monospace';
+                this.ctx.lineWidth = 1;
+                this.ctx.strokeStyle = '#64748b';
+
+                // Graduación Eje X
+                for (let x = Math.ceil(bounds.xMin); x <= Math.floor(bounds.xMax); x++) {
+                    if (x === 0) continue;
+                    const sx = toScreenX(x);
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(sx, originY - 3);
+                    this.ctx.lineTo(sx, originY + 3);
+                    this.ctx.stroke();
+                    this.ctx.textAlign = 'center';
+                    this.ctx.textBaseline = 'top';
+                    const labelY = Math.min(Math.max(originY + 5, 12), h - 14);
+                    this.ctx.fillText(x.toString(), sx, labelY);
+                }
+
+                // Graduación Eje Y
+                for (let y = Math.ceil(bounds.yMin); y <= Math.floor(bounds.yMax); y++) {
+                    if (y === 0) continue;
+                    const sy = toScreenY(y);
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(originX - 3, sy);
+                    this.ctx.lineTo(originX + 3, sy);
+                    this.ctx.stroke();
+                    this.ctx.textAlign = 'right';
+                    this.ctx.textBaseline = 'middle';
+                    const labelX = Math.min(Math.max(originX - 5, 20), w - 6);
+                    this.ctx.fillText(y.toString(), labelX, sy);
+                }
+
+                // Origen (0,0)
+                this.ctx.textAlign = 'right';
+                this.ctx.textBaseline = 'top';
+                this.ctx.fillText("0", originX - 4, originY + 4);
+
+                // Proyección de Dominio (Sombra horizontal sobre el eje X)
+                if (this.showDomain) {
+                    this.ctx.fillStyle = 'rgba(16, 185, 129, 0.28)';
+                    this.ctx.strokeStyle = '#10b981';
+                    this.ctx.lineWidth = 2;
+                    let domStart = bounds.xMin, domEnd = bounds.xMax;
+                    if (this.fnType === 'raiz') domStart = -2;
+
+                    const sx1 = toScreenX(domStart);
+                    const sx2 = toScreenX(domEnd);
+                    this.ctx.fillRect(Math.min(sx1, sx2), originY - 8, Math.abs(sx2 - sx1), 16);
+                    this.ctx.strokeRect(Math.min(sx1, sx2), originY - 8, Math.abs(sx2 - sx1), 16);
+
+                    // Indicador de Extremo Cerrado en raíz cuadrada
+                    if (this.fnType === 'raiz') {
+                        this.ctx.beginPath();
+                        this.ctx.arc(sx1, originY, 5, 0, 2 * Math.PI);
+                        this.ctx.fillStyle = '#10b981';
+                        this.ctx.fill();
+                        this.ctx.strokeStyle = '#ffffff';
+                        this.ctx.lineWidth = 1.5;
+                        this.ctx.stroke();
+                    }
+                }
+
+                // Proyección de Imagen (Sombra vertical sobre el eje Y)
+                if (this.showImage) {
+                    this.ctx.fillStyle = 'rgba(245, 158, 11, 0.28)';
+                    this.ctx.strokeStyle = '#f59e0b';
+                    this.ctx.lineWidth = 2;
+                    let imMin = 0, imMax = 0;
+                    if (this.fnType === 'parabola') { imMin = -4; imMax = bounds.yMax; }
+                    else if (this.fnType === 'raiz') { imMin = 0; imMax = bounds.yMax; }
+                    else if (this.fnType === 'cubica') { imMin = bounds.yMin; imMax = bounds.yMax; }
+                    else if (this.fnType === 'seno') { imMin = -3; imMax = 3; }
+
+                    const sy1 = toScreenY(imMin);
+                    const sy2 = toScreenY(imMax);
+                    this.ctx.fillRect(originX - 8, Math.min(sy1, sy2), 16, Math.abs(sy2 - sy1));
+                    this.ctx.strokeRect(originX - 8, Math.min(sy1, sy2), 16, Math.abs(sy2 - sy1));
+
+                    // Indicador de Extremo Cerrado en parábola y raíz
+                    if (this.fnType === 'parabola' || this.fnType === 'raiz' || this.fnType === 'seno') {
+                        this.ctx.beginPath();
+                        this.ctx.arc(originX, sy1, 5, 0, 2 * Math.PI);
+                        this.ctx.fillStyle = '#f59e0b';
+                        this.ctx.fill();
+                        this.ctx.strokeStyle = '#ffffff';
+                        this.ctx.lineWidth = 1.5;
+                        this.ctx.stroke();
+                    }
+                }
+
+                // Curva de la Función f(x)
+                this.ctx.strokeStyle = '#436600';
+                this.ctx.lineWidth = 3;
+                this.ctx.beginPath();
+                let plotting = false;
+                for (let px = 0; px <= w; px += 2) {
+                    const x = bounds.xMin + (px / w) * xSpan;
+                    const y = this.evalFn(x);
+                    if (isNaN(y) || y < bounds.yMin - 1 || y > bounds.yMax + 1) {
+                        plotting = false;
+                        continue;
+                    }
+                    const py = toScreenY(y);
+                    if (!plotting) {
+                        this.ctx.moveTo(px, py);
+                        plotting = true;
+                    } else {
+                        this.ctx.lineTo(px, py);
+                    }
+                }
+                this.ctx.stroke();
+
+                // Punto Trazador Ortogonal Móvil
+                const curY = this.evalFn(this.sliderX);
+                if (!isNaN(curY) && curY >= bounds.yMin && curY <= bounds.yMax) {
+                    const ptX = toScreenX(this.sliderX);
+                    const ptY = toScreenY(curY);
+
+                    // Líneas punteadas hacia los ejes
+                    this.ctx.strokeStyle = '#cbd5e1';
+                    this.ctx.lineWidth = 1.5;
+                    this.ctx.setLineDash([4, 4]);
+
+                    // A eje X
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(ptX, ptY);
+                    this.ctx.lineTo(ptX, originY);
+                    this.ctx.stroke();
+
+                    // A eje Y
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(ptX, ptY);
+                    this.ctx.lineTo(originX, ptY);
+                    this.ctx.stroke();
+                    this.ctx.setLineDash([]);
+
+                    // Sombra en Eje X
+                    this.ctx.beginPath();
+                    this.ctx.arc(ptX, originY, 4.5, 0, 2 * Math.PI);
+                    this.ctx.fillStyle = '#10b981';
+                    this.ctx.fill();
+
+                    // Sombra en Eje Y
+                    this.ctx.beginPath();
+                    this.ctx.arc(originX, ptY, 4.5, 0, 2 * Math.PI);
+                    this.ctx.fillStyle = '#f59e0b';
+                    this.ctx.fill();
+
+                    // Punto sobre la curva
+                    this.ctx.beginPath();
+                    this.ctx.arc(ptX, ptY, 6.5, 0, 2 * Math.PI);
+                    this.ctx.fillStyle = '#ffffff';
+                    this.ctx.fill();
+                    this.ctx.lineWidth = 2.5;
+                    this.ctx.strokeStyle = '#436600';
+                    this.ctx.stroke();
+                }
+            }
+        };
+
+        // ================= MODULE 2 CONTROLLER =================
+        const Module2 = {
+            canvas: null,
+            ctx: null,
+            caseType: 'tramos',
+            init() {
+                this.canvas = document.getElementById('canvas-m2');
+                this.ctx = this.canvas.getContext('2d');
+                this.resizeCanvas();
+                window.addEventListener('resize', () => this.resizeCanvas());
+            },
+            resizeCanvas() {
+                const rect = this.canvas.getBoundingClientRect();
+                this.canvas.width = rect.width * (window.devicePixelRatio || 1);
+                this.canvas.height = rect.height * (window.devicePixelRatio || 1);
+                this.ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+                this.draw();
+            },
+            resizeAndDraw() {
+                this.resizeCanvas();
+            },
+            changeCase(val) {
+                this.caseType = val;
+                const defBox = document.getElementById('m2-def-box');
+                const descText = document.getElementById('m2-desc-text');
+                const domRes = document.getElementById('m2-dom-res');
+                const imRes = document.getElementById('m2-im-res');
+                const badgeMode = document.getElementById('m2-badge-mode');
+
+                const hintBox = document.getElementById('m2-hint-box');
+                const legClosed = document.getElementById('m2-leg-closed');
+                const legOpen = document.getElementById('m2-leg-open');
+                const legAsintota = document.getElementById('m2-leg-asintota');
+
+                if (val === 'tramos') {
+                    badgeMode.textContent = "Tramos Discontinuos";
+                    if (hintBox) hintBox.classList.remove('hidden');
+                    if (legClosed) legClosed.classList.remove('hidden');
+                    if (legOpen) legOpen.classList.remove('hidden');
+                    if (legAsintota) legAsintota.classList.add('hidden');
+                    defBox.innerHTML = "$$f(x) = \\begin{cases} x+2 & \\text{si } x \\in [-3, 1) \\\\ 5 - x & \\text{si } x \\in [1, 4] \\end{cases}$$";
+                    descText.innerHTML = "Se observa que el primer tramo, asociado a la función $x+2$, está comprendido en un intervalo semiabierto que no incluye al valor $x=1$ en el límite superior (por esto el círculo se ve abierto). Mientras que en el segundo tramo, asociado a la función $5-x$, el intervalo cerrado sí toma en el extremo inferior al $x=1$, por esto el círculo va cerrado.";
+                    domRes.innerHTML = "<strong>Dominio:</strong> $\\text{Dom}(f) = [-3, 4]$";
+                    imRes.innerHTML = "<strong>Imagen:</strong> $\\text{Im}(f) = [-1, 4]$";
+                } else if (val === 'asintota_v') {
+                    badgeMode.textContent = "Asíntota Vertical";
+                    if (hintBox) hintBox.classList.add('hidden');
+                    if (legClosed) legClosed.classList.add('hidden');
+                    if (legOpen) legOpen.classList.add('hidden');
+                    if (legAsintota) legAsintota.classList.remove('hidden');
+                    defBox.innerHTML = "$$f(x) = \\frac{1}{x - 2}$$";
+                    descText.innerHTML = "La recta vertical $x = 2$ es una <strong>asíntota vertical</strong>. En los alrededores del valor $x = 2$, los valores de $y$ crecen o decrecen sin límite sin cruzar la recta; por ende, $x=2$ queda excluido del dominio.";
+                    domRes.innerHTML = "<strong>Dominio:</strong> $\\text{Dom}(f) = \\mathbb{R} \\setminus \\{2\\} = (-\\infty, 2) \\cup (2, +\\infty)$";
+                    imRes.innerHTML = "<strong>Imagen:</strong> $\\text{Im}(f) = \\mathbb{R} \\setminus \\{0\\} = (-\\infty, 0) \\cup (0, +\\infty)$";
+                } else if (val === 'asintota_h') {
+                    badgeMode.textContent = "Asíntota Horizontal y Vertical";
+                    if (hintBox) hintBox.classList.add('hidden');
+                    if (legClosed) legClosed.classList.add('hidden');
+                    if (legOpen) legOpen.classList.add('hidden');
+                    if (legAsintota) legAsintota.classList.remove('hidden');
+                    defBox.innerHTML = "$$f(x) = \\frac{2x}{x+1}$$";
+                    descText.innerHTML = "Presenta una asíntota vertical en $x = -1$ (anula el denominador) y una <strong>asíntota horizontal</strong> en $y = 2$.";
+                    domRes.innerHTML = "<strong>Dominio:</strong> $\\text{Dom}(f) = \\mathbb{R} \\setminus \\{-1\\}$";
+                    imRes.innerHTML = "<strong>Imagen:</strong> $\\text{Im}(f) = \\mathbb{R} \\setminus \\{2\\}$";
+                }
+                renderKaTeX();
+                this.draw();
+            },
+            draw() {
+                if (!this.ctx) return;
+                const rect = this.canvas.getBoundingClientRect();
+                const w = rect.width;
+                const h = rect.height;
+                this.ctx.clearRect(0, 0, w, h);
+
+                const xMin = -5, xMax = 5, yMin = -3, yMax = 5.5;
+                const xSpan = xMax - xMin, ySpan = yMax - yMin;
+                const toScreenX = (x) => ((x - xMin) / xSpan) * w;
+                const toScreenY = (y) => h - ((y - yMin) / ySpan) * h;
+
+                // Cuadrícula y Ejes
+                this.ctx.strokeStyle = '#1e293b';
+                this.ctx.lineWidth = 1;
+                for (let x = xMin; x <= xMax; x++) {
+                    const sx = toScreenX(x);
+                    this.ctx.beginPath(); this.ctx.moveTo(sx, 0); this.ctx.lineTo(sx, h); this.ctx.stroke();
+                }
+                for (let y = Math.ceil(yMin); y <= Math.floor(yMax); y++) {
+                    const sy = toScreenY(y);
+                    this.ctx.beginPath(); this.ctx.moveTo(0, sy); this.ctx.lineTo(w, sy); this.ctx.stroke();
+                }
+
+                this.ctx.strokeStyle = '#64748b';
+                this.ctx.lineWidth = 1.5;
+                const originX = toScreenX(0);
+                const originY = toScreenY(0);
+                this.ctx.beginPath(); this.ctx.moveTo(0, originY); this.ctx.lineTo(w, originY); this.ctx.stroke();
+                this.ctx.beginPath(); this.ctx.moveTo(originX, 0); this.ctx.lineTo(originX, h); this.ctx.stroke();
+
+                // Graduación de los Ejes (Ticks y Números)
+                this.ctx.fillStyle = '#94a3b8';
+                this.ctx.font = '10px JetBrains Mono, monospace';
+                this.ctx.lineWidth = 1;
+                this.ctx.strokeStyle = '#64748b';
+
+                // Graduación Eje X
+                for (let x = xMin; x <= xMax; x++) {
+                    if (x === 0) continue;
+                    const sx = toScreenX(x);
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(sx, originY - 3);
+                    this.ctx.lineTo(sx, originY + 3);
+                    this.ctx.stroke();
+                    this.ctx.textAlign = 'center';
+                    this.ctx.textBaseline = 'top';
+                    const labelY = Math.min(Math.max(originY + 5, 12), h - 14);
+                    this.ctx.fillText(x.toString(), sx, labelY);
+                }
+
+                // Graduación Eje Y
+                for (let y = Math.ceil(yMin); y <= Math.floor(yMax); y++) {
+                    if (y === 0) continue;
+                    const sy = toScreenY(y);
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(originX - 3, sy);
+                    this.ctx.lineTo(originX + 3, sy);
+                    this.ctx.stroke();
+                    this.ctx.textAlign = 'right';
+                    this.ctx.textBaseline = 'middle';
+                    const labelX = Math.min(Math.max(originX - 5, 20), w - 6);
+                    this.ctx.fillText(y.toString(), labelX, sy);
+                }
+
+                // Origen (0,0)
+                this.ctx.textAlign = 'right';
+                this.ctx.textBaseline = 'top';
+                this.ctx.fillText("0", originX - 4, originY + 4);
+
+                if (this.caseType === 'tramos') {
+                    // Tramo 1: x in [-3, 1) -> y = x + 2
+                    this.ctx.strokeStyle = '#436600';
+                    this.ctx.lineWidth = 3;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(toScreenX(-3), toScreenY(-3 + 2));
+                    this.ctx.lineTo(toScreenX(0.96), toScreenY(0.96 + 2));
+                    this.ctx.stroke();
+
+                    // Tramo 2: x in [1, 4] -> y = 5 - x (salto visible en y=4 vs y=3)
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(toScreenX(1), toScreenY(5 - 1));
+                    this.ctx.lineTo(toScreenX(4), toScreenY(5 - 4));
+                    this.ctx.stroke();
+
+                    // Puntos en Extremos
+                    // Cerrado en x = -3, y = -1
+                    this.drawPoint(toScreenX(-3), toScreenY(-1), true, '#10b981');
+                    // Abierto en x = 1, y = 3 (tramo izquierdo)
+                    this.drawPoint(toScreenX(1), toScreenY(3), false, '#ef4444');
+                    // Cerrado en x = 1, y = 4 (tramo derecho, visiblemente separado)
+                    this.drawPoint(toScreenX(1), toScreenY(4), true, '#10b981');
+                    // Cerrado en x = 4, y = 1
+                    this.drawPoint(toScreenX(4), toScreenY(1), true, '#10b981');
+
+                    // Etiquetas descriptivas en Canvas
+                    this.ctx.fillStyle = '#ef4444';
+                    this.ctx.font = 'bold 10px Outfit';
+                    this.ctx.fillText("Punto Abierto (1, 3)", toScreenX(1) + 10, toScreenY(3) + 4);
+
+                    this.ctx.fillStyle = '#10b981';
+                    this.ctx.fillText("Punto Cerrado (1, 4)", toScreenX(1) + 10, toScreenY(4) - 4);
+
+                } else if (this.caseType === 'asintota_v') {
+                    // Asíntota x = 2
+                    this.ctx.strokeStyle = '#a855f7';
+                    this.ctx.setLineDash([6, 6]);
+                    this.ctx.lineWidth = 2;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(toScreenX(2), 0);
+                    this.ctx.lineTo(toScreenX(2), h);
+                    this.ctx.stroke();
+                    this.ctx.setLineDash([]);
+
+                    this.ctx.fillStyle = '#a855f7';
+                    this.ctx.font = 'bold 11px Outfit';
+                    this.ctx.fillText("Asíntota Vertical x = 2", toScreenX(2) + 8, 25);
+
+                    // Curva f(x) = 1 / (x - 2)
+                    this.ctx.strokeStyle = '#436600';
+                    this.ctx.lineWidth = 3;
+
+                    // Rama Izquierda
+                    this.ctx.beginPath();
+                    let first = true;
+                    for (let px = 0; px <= toScreenX(1.85); px += 2) {
+                        const x = xMin + (px / w) * xSpan;
+                        const y = 1 / (x - 2);
+                        const py = toScreenY(y);
+                        if (first) { this.ctx.moveTo(px, py); first = false; } else { this.ctx.lineTo(px, py); }
+                    }
+                    this.ctx.stroke();
+
+                    // Rama Derecha
+                    this.ctx.beginPath();
+                    first = true;
+                    for (let px = toScreenX(2.15); px <= w; px += 2) {
+                        const x = xMin + (px / w) * xSpan;
+                        const y = 1 / (x - 2);
+                        const py = toScreenY(y);
+                        if (first) { this.ctx.moveTo(px, py); first = false; } else { this.ctx.lineTo(px, py); }
+                    }
+                    this.ctx.stroke();
+
+                } else if (this.caseType === 'asintota_h') {
+                    // Asíntota Horizontal y = 2
+                    this.ctx.strokeStyle = '#a855f7';
+                    this.ctx.setLineDash([6, 6]);
+                    this.ctx.lineWidth = 2;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(0, toScreenY(2));
+                    this.ctx.lineTo(w, toScreenY(2));
+                    this.ctx.stroke();
+
+                    // Asíntota Vertical x = -1
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(toScreenX(-1), 0);
+                    this.ctx.lineTo(toScreenX(-1), h);
+                    this.ctx.stroke();
+                    this.ctx.setLineDash([]);
+
+                    this.ctx.fillStyle = '#a855f7';
+                    this.ctx.font = 'bold 11px Outfit';
+                    this.ctx.fillText("Asíntota Horiz. y = 2", 15, toScreenY(2) - 8);
+                    this.ctx.fillText("Asíntota Vert. x = -1", toScreenX(-1) + 8, h - 20);
+
+                    // Curva f(x) = 2x / (x+1)
+                    this.ctx.strokeStyle = '#436600';
+                    this.ctx.lineWidth = 3;
+                    
+                    // Rama Izquierda (x < -1)
+                    this.ctx.beginPath();
+                    let first = true;
+                    for (let px = 0; px <= toScreenX(-1.15); px += 2) {
+                        const x = xMin + (px / w) * xSpan;
+                        const y = (2 * x) / (x + 1);
+                        const py = toScreenY(y);
+                        if (first) { this.ctx.moveTo(px, py); first = false; } else { this.ctx.lineTo(px, py); }
+                    }
+                    this.ctx.stroke();
+
+                    // Rama Derecha (x > -1)
+                    this.ctx.beginPath();
+                    first = true;
+                    for (let px = toScreenX(-0.85); px <= w; px += 2) {
+                        const x = xMin + (px / w) * xSpan;
+                        const y = (2 * x) / (x + 1);
+                        const py = toScreenY(y);
+                        if (first) { this.ctx.moveTo(px, py); first = false; } else { this.ctx.lineTo(px, py); }
+                    }
+                    this.ctx.stroke();
+                }
+            },
+            drawPoint(x, y, closed, color) {
+                this.ctx.beginPath();
+                this.ctx.arc(x, y, 6.5, 0, 2 * Math.PI);
+                if (closed) {
+                    this.ctx.fillStyle = color;
+                    this.ctx.fill();
+                    this.ctx.strokeStyle = '#ffffff';
+                    this.ctx.lineWidth = 1.5;
+                    this.ctx.stroke();
+                } else {
+                    this.ctx.fillStyle = '#0f172a';
+                    this.ctx.fill();
+                    this.ctx.lineWidth = 2.5;
+                    this.ctx.strokeStyle = color;
+                    this.ctx.stroke();
+                }
+            }
+        };
+
+        // ================= MODULE 3 CONTROLLER =================
+        const Module3 = {
+            canvas: null,
+            ctx: null,
+            curveType: 'funcion_valida',
+            sliderX: 0.0,
+            isDragging: false,
+            init() {
+                this.canvas = document.getElementById('canvas-m3');
+                this.ctx = this.canvas.getContext('2d');
+                this.resizeCanvas();
+                window.addEventListener('resize', () => this.resizeCanvas());
+
+                // Interacciones mouse y touch para arrastrar recta vertical
+                this.canvas.addEventListener('mousedown', (e) => { this.isDragging = true; this.updateFromMouse(e); });
+                window.addEventListener('mousemove', (e) => { if (this.isDragging) this.updateFromMouse(e); });
+                window.addEventListener('mouseup', () => { this.isDragging = false; });
+
+                this.canvas.addEventListener('touchstart', (e) => { this.isDragging = true; this.updateFromTouch(e); }, { passive: true });
+                window.addEventListener('touchmove', (e) => { if (this.isDragging) this.updateFromTouch(e); }, { passive: true });
+                window.addEventListener('touchend', () => { this.isDragging = false; });
+            },
+            resizeCanvas() {
+                const rect = this.canvas.getBoundingClientRect();
+                this.canvas.width = rect.width * (window.devicePixelRatio || 1);
+                this.canvas.height = rect.height * (window.devicePixelRatio || 1);
+                this.ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+                this.draw();
+            },
+            resizeAndDraw() {
+                this.resizeCanvas();
+            },
+            changeCurve(val) {
+                this.curveType = val;
+                this.updateAnalysis();
+                this.draw();
+            },
+            sliderMoved(val) {
+                this.sliderX = parseFloat(val);
+                this.draw();
+                this.updateAnalysis();
+            },
+            updateFromMouse(e) {
+                const rect = this.canvas.getBoundingClientRect();
+                const px = e.clientX - rect.left;
+                const xMin = -5, xMax = 5;
+                const x = xMin + (px / rect.width) * (xMax - xMin);
+                this.sliderX = Math.max(-5, Math.min(5, x));
+                document.getElementById('m3-slider').value = this.sliderX;
+                this.draw();
+                this.updateAnalysis();
+            },
+            updateFromTouch(e) {
+                if (!e.touches[0]) return;
+                const rect = this.canvas.getBoundingClientRect();
+                const px = e.touches[0].clientX - rect.left;
+                const xMin = -5, xMax = 5;
+                const x = xMin + (px / rect.width) * (xMax - xMin);
+                this.sliderX = Math.max(-5, Math.min(5, x));
+                document.getElementById('m3-slider').value = this.sliderX;
+                this.draw();
+                this.updateAnalysis();
+            },
+            getIntersections(x0) {
+                let intersections = [];
+                if (this.curveType === 'funcion_valida') {
+                    // f(x) = 0.2*x^3 - 1.5*x
+                    const y = 0.2 * x0 * x0 * x0 - 1.5 * x0;
+                    intersections.push(y);
+                } else if (this.curveType === 'circulo') {
+                    // x^2 + y^2 = 16 => y = ±sqrt(16 - x^2)
+                    const rad = 16 - x0 * x0;
+                    if (rad >= 0) {
+                        const y1 = Math.sqrt(rad);
+                        const y2 = -Math.sqrt(rad);
+                        intersections.push(y1);
+                        if (Math.abs(y1 - y2) > 0.001) intersections.push(y2);
+                    }
+                } else if (this.curveType === 'parabola_horiz') {
+                    // x = y^2 => y = ±sqrt(x) para x >= 0
+                    if (x0 >= 0) {
+                        const y1 = Math.sqrt(x0);
+                        const y2 = -Math.sqrt(x0);
+                        intersections.push(y1);
+                        if (Math.abs(y1 - y2) > 0.001) intersections.push(y2);
+                    }
+                } else if (this.curveType === 'onda_ruptura') {
+                    if (x0 >= -4 && x0 <= 4) {
+                        intersections.push(Math.sin(x0) * 2);
+                        if (x0 >= -1.5 && x0 <= 1.5) {
+                            intersections.push(Math.cos(x0) * 2 + 1.2);
+                        }
+                    }
+                }
+                return intersections;
+            },
+            updateAnalysis() {
+                document.getElementById('m3-xval').innerText = this.sliderX.toFixed(2);
+                const inters = this.getIntersections(this.sliderX);
+                const count = inters.length;
+                document.getElementById('m3-intersections-count').innerText = count;
+
+                const badge = document.getElementById('m3-badge-status');
+                const diag = document.getElementById('m3-diagnosis-text');
+                const tipBox = document.getElementById('m3-tip-box');
+
+                const isFunc = (this.curveType === 'funcion_valida');
+
+                if (isFunc) {
+                    badge.className = "text-xs bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full font-bold";
+                    badge.innerText = "ES FUNCIÓN";
+                    diag.innerHTML = `En $x_0 = ${this.sliderX.toFixed(2)}$, la recta vertical corta a la gráfica en <strong>exactamente un punto</strong> ($y = ${inters[0] !== undefined ? inters[0].toFixed(2) : 'no definido'}$). Se respeta rigurosamente el criterio de unicidad funcional.`;
+                    tipBox.className = "bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs text-emerald-900 leading-relaxed";
+                    tipBox.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> <strong>Conclusión:</strong> Para cualquier posición de la recta vertical trazada en el dominio, existe a lo sumo un punto de intersección. Como se cumple el criterio, entonces esta relación sí es una función.`;
+                } else {
+                    badge.className = "text-xs bg-rose-100 text-rose-800 px-2.5 py-0.5 rounded-full font-bold";
+                    badge.innerText = "NO ES FUNCIÓN";
+                    if (count > 1) {
+                        diag.innerHTML = `¡Violación del principio de unicidad! En $x_0 = ${this.sliderX.toFixed(2)}$, la recta vertical corta en <strong>${count} puntos distintos</strong>. A un único valor de entrada le corresponden múltiples salidas simultáneas ($y_1 = ${inters[0].toFixed(2)}, y_2 = ${inters[1].toFixed(2)}$).`;
+                    } else if (count === 0) {
+                        diag.innerHTML = `En $x_0 = ${this.sliderX.toFixed(2)}$, la recta vertical no corta la curva (valor fuera del dominio de la relación). Sin embargo, en otras zonas sí presenta múltiples cortes.`;
+                    } else {
+                        diag.innerHTML = `En $x_0 = ${this.sliderX.toFixed(2)}$, corta en un único punto; no obstante, al existir otras rectas verticales con $\\ge 2$ intersecciones, la relación geométrica completa no califica como función.`;
+                    }
+                    tipBox.className = "bg-rose-50 border border-rose-200 rounded-xl p-3 text-xs text-rose-900 leading-relaxed";
+                    tipBox.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-600 mr-1"></i> <strong>Falla la prueba:</strong> Al existir al menos una recta vertical con $\\ge 2$ intersecciones, la relación NO cumple la definición formal de función $y = f(x)$.`;
+                }
+                renderKaTeX();
+            },
+            draw() {
+                if (!this.ctx) return;
+                const rect = this.canvas.getBoundingClientRect();
+                const w = rect.width;
+                const h = rect.height;
+                this.ctx.clearRect(0, 0, w, h);
+
+                const xMin = -5, xMax = 5, yMin = -5, yMax = 5;
+                const xSpan = xMax - xMin, ySpan = yMax - yMin;
+                const toScreenX = (x) => ((x - xMin) / xSpan) * w;
+                const toScreenY = (y) => h - ((y - yMin) / ySpan) * h;
+
+                // Cuadrícula y Ejes
+                this.ctx.strokeStyle = '#1e293b';
+                this.ctx.lineWidth = 1;
+                for (let x = xMin; x <= xMax; x++) {
+                    const sx = toScreenX(x);
+                    this.ctx.beginPath(); this.ctx.moveTo(sx, 0); this.ctx.lineTo(sx, h); this.ctx.stroke();
+                }
+                for (let y = yMin; y <= yMax; y++) {
+                    const sy = toScreenY(y);
+                    this.ctx.beginPath(); this.ctx.moveTo(0, sy); this.ctx.lineTo(w, sy); this.ctx.stroke();
+                }
+
+                this.ctx.strokeStyle = '#64748b';
+                this.ctx.lineWidth = 1.5;
+                const originX = toScreenX(0);
+                const originY = toScreenY(0);
+                this.ctx.beginPath(); this.ctx.moveTo(0, originY); this.ctx.lineTo(w, originY); this.ctx.stroke();
+                this.ctx.beginPath(); this.ctx.moveTo(originX, 0); this.ctx.lineTo(originX, h); this.ctx.stroke();
+
+                // Graduación de los Ejes (Ticks y Números)
+                this.ctx.fillStyle = '#94a3b8';
+                this.ctx.font = '10px JetBrains Mono, monospace';
+                this.ctx.lineWidth = 1;
+                this.ctx.strokeStyle = '#64748b';
+
+                // Graduación Eje X
+                for (let x = xMin; x <= xMax; x++) {
+                    if (x === 0) continue;
+                    const sx = toScreenX(x);
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(sx, originY - 3);
+                    this.ctx.lineTo(sx, originY + 3);
+                    this.ctx.stroke();
+                    this.ctx.textAlign = 'center';
+                    this.ctx.textBaseline = 'top';
+                    const labelY = Math.min(Math.max(originY + 5, 12), h - 14);
+                    this.ctx.fillText(x.toString(), sx, labelY);
+                }
+
+                // Graduación Eje Y
+                for (let y = yMin; y <= yMax; y++) {
+                    if (y === 0) continue;
+                    const sy = toScreenY(y);
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(originX - 3, sy);
+                    this.ctx.lineTo(originX + 3, sy);
+                    this.ctx.stroke();
+                    this.ctx.textAlign = 'right';
+                    this.ctx.textBaseline = 'middle';
+                    const labelX = Math.min(Math.max(originX - 5, 20), w - 6);
+                    this.ctx.fillText(y.toString(), labelX, sy);
+                }
+
+                // Origen (0,0)
+                this.ctx.textAlign = 'right';
+                this.ctx.textBaseline = 'top';
+                this.ctx.fillText("0", originX - 4, originY + 4);
+
+                // Trazado de Curva según tipo
+                this.ctx.strokeStyle = '#436600';
+                this.ctx.lineWidth = 3;
+
+                if (this.curveType === 'funcion_valida') {
+                    this.ctx.beginPath();
+                    let first = true;
+                    for (let px = 0; px <= w; px += 2) {
+                        const x = xMin + (px / w) * xSpan;
+                        const y = 0.2 * x * x * x - 1.5 * x;
+                        const py = toScreenY(y);
+                        if (first) { this.ctx.moveTo(px, py); first = false; } else { this.ctx.lineTo(px, py); }
+                    }
+                    this.ctx.stroke();
+                } else if (this.curveType === 'circulo') {
+                    this.ctx.beginPath();
+                    const radiusX = (4 / xSpan) * w;
+                    const radiusY = (4 / ySpan) * h;
+                    this.ctx.ellipse(toScreenX(0), toScreenY(0), radiusX, radiusY, 0, 0, 2 * Math.PI);
+                    this.ctx.stroke();
+                } else if (this.curveType === 'parabola_horiz') {
+                    this.ctx.beginPath();
+                    let first = true;
+                    for (let py = 0; py <= h; py += 2) {
+                        const y = yMin + ((h - py) / h) * ySpan;
+                        const x = y * y;
+                        const px = toScreenX(x);
+                        if (first) { this.ctx.moveTo(px, py); first = false; } else { this.ctx.lineTo(px, py); }
+                    }
+                    this.ctx.stroke();
+                } else if (this.curveType === 'onda_ruptura') {
+                    // Rama 1
+                    this.ctx.beginPath();
+                    let first = true;
+                    for (let px = 0; px <= w; px += 2) {
+                        const x = xMin + (px / w) * xSpan;
+                        const y = Math.sin(x) * 2;
+                        const py = toScreenY(y);
+                        if (first) { this.ctx.moveTo(px, py); first = false; } else { this.ctx.lineTo(px, py); }
+                    }
+                    this.ctx.stroke();
+
+                    // Rama 2 (solapada en el centro)
+                    this.ctx.beginPath();
+                    first = true;
+                    for (let px = toScreenX(-1.5); px <= toScreenX(1.5); px += 2) {
+                        const x = xMin + (px / w) * xSpan;
+                        const y = Math.cos(x) * 2 + 1.2;
+                        const py = toScreenY(y);
+                        if (first) { this.ctx.moveTo(px, py); first = false; } else { this.ctx.lineTo(px, py); }
+                    }
+                    this.ctx.stroke();
+                }
+
+                // Recta Vertical Móvil de Prueba
+                const sx0 = toScreenX(this.sliderX);
+                this.ctx.strokeStyle = '#ef4444';
+                this.ctx.lineWidth = 2.5;
+                this.ctx.setLineDash([4, 4]);
+                this.ctx.beginPath();
+                this.ctx.moveTo(sx0, 0);
+                this.ctx.lineTo(sx0, h);
+                this.ctx.stroke();
+                this.ctx.setLineDash([]);
+
+                // Puntos de Intersección
+                const inters = this.getIntersections(this.sliderX);
+                inters.forEach(y => {
+                    const sy = toScreenY(y);
+                    this.ctx.beginPath();
+                    this.ctx.arc(sx0, sy, 7, 0, 2 * Math.PI);
+                    this.ctx.fillStyle = inters.length === 1 ? '#10b981' : '#ef4444';
+                    this.ctx.fill();
+                    this.ctx.lineWidth = 2;
+                    this.ctx.strokeStyle = '#ffffff';
+                    this.ctx.stroke();
+                });
+            }
+        };
+
+        // Inicialización General
+        window.onload = function() {
+            Module1.init();
+            Module2.init();
+            Module3.init();
+            renderKaTeX();
+        };
+    </script>
+</body>
+</html>
